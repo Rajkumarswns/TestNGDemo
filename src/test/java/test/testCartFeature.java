@@ -2,7 +2,7 @@
 package test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import org.openqa.selenium.support.ui.*;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import org.openqa.selenium.By;
@@ -12,11 +12,14 @@ import static org.testng.Assert.*;
 import java.sql.SQLOutput;
 import java.time.Duration;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 // how to enable TestNGReport for Intellj IDEA
 //https://www.jetbrains.com/help/idea/testng.html#run-testng-with-reports
+//https://testng.org/annotations.html
 
-public class AuthenticationTest extends TestManager {
+//@Test(groups = {"Functional", "Positive"})
+public class testCartFeature extends TestManager {
 
     int numberOfItemsInCart = 0;
 
@@ -47,8 +50,16 @@ public class AuthenticationTest extends TestManager {
 
     }
 
-    @Test(dependsOnMethods = {"testLoginPage"}, priority = 2)
+    @Test(dependsOnMethods = {"testLoginPage"}, priority = 2, retryAnalyzer = test.FailureHandler.class)
     public void testSuccessfulLogin() {
+
+
+
+        // Implicit Wait   - Instruct the selenium to wait for 5 seconds to find an element- Global
+        // in case the element not found, throws NoSuchElementException
+
+        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+
 
         WebElement txtuserName = driver.findElement(By.id("user-name"));
         WebElement txtpassword = driver.findElement(By.id("password"));
@@ -76,6 +87,11 @@ public class AuthenticationTest extends TestManager {
 
         System.out.println(itemName);
         System.out.println("-----------------");
+
+        // Explicit Wait  -- you can provide condition for the wait - it is not a global wait
+        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(5));
+        wait.until(driver -> driver.findElement(By.className("inventory_item")).isDisplayed());
+
         List<WebElement> productsList = driver.findElements(By.className("inventory_item"));
 
         // verify if there are 6 products in the list
@@ -83,6 +99,7 @@ public class AuthenticationTest extends TestManager {
         System.out.println("Number of products: " + productsList.size());
 
 
+        // Parameteres,  Expected, Actual, Message
         assertEquals(productsList.size(), 6, "Number of products is not 6");
 
         for (WebElement item : productsList) {
@@ -111,6 +128,19 @@ public class AuthenticationTest extends TestManager {
 
     @Test(dependsOnMethods = {"testAddItemToCart"}, priority = 4)
     public void testCartList() {
+
+        // Fluent is like explicit wait but more flexible
+
+        // Fluent Wait
+        Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
+                .withTimeout(Duration.ofSeconds(10))
+                .pollingEvery(Duration.ofSeconds(2))
+                .ignoring(NoSuchElementException.class);
+
+        wait.until(
+                ExpectedConditions.visibilityOfElementLocated(By.className("shopping_cart_link")));
+
+
 
         WebElement cart = driver.findElement(By.className("shopping_cart_link"));
         cart.click();

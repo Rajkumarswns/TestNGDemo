@@ -32,7 +32,7 @@ public class TestManager {
     public void setUp()
     {
         System.out.println("Test Class Started: " );
-         driver = new ChromeDriver();
+        driver = new ChromeDriver();
     }
 
     @BeforeMethod
@@ -49,7 +49,7 @@ public class TestManager {
 
         TakesScreenshot scrShot =((TakesScreenshot)driver);
         File SrcFile=scrShot.getScreenshotAs(OutputType.FILE);
-        File DestFile=new File("c:/rajkumar/testng_session/test-output/"+ method.getName()+".png");
+        File DestFile=new File("c:/rajkumar/java_Basics/testng_session/test-output/"+ method.getName()+".png");
         try {
             FileUtils.copyFile(SrcFile, DestFile);
         } catch (Exception e) {

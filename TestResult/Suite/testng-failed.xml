@@ -5,12 +5,12 @@
     <classes>
       <class name="test.AuthenticationTest">
         <methods>
-          <include name="testAddItemToCart"/>
           <include name="beforeSuite"/>
-          <include name="tearDown"/>
+          <include name="testAddItemToCart"/>
           <include name="afterTest"/>
-          <include name="testCartList"/>
+          <include name="tearDown"/>
           <include name="testLoginPage"/>
+          <include name="testCartList"/>
           <include name="beforeTest"/>
           <include name="setUp"/>
           <include name="afterSuite"/>
