@@ -11,6 +11,7 @@ public class FailureHandler implements IRetryAnalyzer {
     private int retryCount = 1;
     @Override
     public boolean retry(ITestResult iTestResult) {
+
        if(!iTestResult.isSuccess())
        {
            this.retryCount+=1;

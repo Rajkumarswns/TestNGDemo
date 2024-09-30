@@ -65,6 +65,8 @@ public class testCartFeature extends TestManager {
         WebElement txtpassword = driver.findElement(By.id("password"));
         WebElement btnLogin = driver.findElement(By.id("login-button"));
 
+
+
         txtuserName.sendKeys("standard_user");
         txtpassword.sendKeys("secret_sauce");
 
